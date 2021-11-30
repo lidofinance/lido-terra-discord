@@ -26,21 +26,17 @@ func NewDefaultLidoBot(token string, guildID, channelID string) (Bot, error) {
 		return nil, fmt.Errorf("failed to create bot session instance: %w", err)
 	}
 
-	lb := &LidoBot{
-		session:   session,
-		channelID: channelID,
-		guildID:   guildID,
-	}
+	lb := NewLidoBot(guildID, channelID, session)
 	return lb, nil
 }
 
-func NewLidoBot(guildID, channelID string, session Session) (Bot, error) {
+func NewLidoBot(guildID, channelID string, session Session) Bot {
 	lb := &LidoBot{
 		session:   session,
 		channelID: channelID,
 		guildID:   guildID,
 	}
-	return lb, nil
+	return lb
 }
 
 type LidoBot struct {

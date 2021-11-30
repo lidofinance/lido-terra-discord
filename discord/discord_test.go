@@ -35,10 +35,7 @@ func TestParticipants(t *testing.T) {
 		}, nil)
 	m.EXPECT().GuildMembers("testGuildID", "3", 100).Return(nil, nil)
 
-	lb, err := NewLidoBot("testGuildID", "testChannelID", m)
-	if err != nil {
-		t.Fatal(err)
-	}
+	lb := NewLidoBot("testGuildID", "testChannelID", m)
 
 	participants, err := lb.GetParticipants()
 	if err != nil {
@@ -87,10 +84,7 @@ func TestSendMessage(t *testing.T) {
 	p := NewMockPicture(ctrl)
 	m := NewMockSession(ctrl)
 
-	lb, err := NewLidoBot("testGuildID", "testChannelID", m)
-	if err != nil {
-		t.Fatal(err)
-	}
+	lb := NewLidoBot("testGuildID", "testChannelID", m)
 
 	m.EXPECT().ChannelMessageSendComplex("testChannelID", MessageMatcher("test message", nil)).Times(1)
 	m.EXPECT().ChannelMessageSendComplex("testChannelID", MessageMatcher("<@TestID>: test message", nil)).Times(1)
@@ -100,7 +94,7 @@ func TestSendMessage(t *testing.T) {
 	p.EXPECT().Name().Times(1)
 	p.EXPECT().Body().Times(1)
 
-	err = lb.SendMessage(nil, "test message", nil)
+	err := lb.SendMessage(nil, "test message", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
