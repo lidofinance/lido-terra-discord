@@ -2,9 +2,10 @@ package discord
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/golang/mock/gomock"
-	"testing"
 )
 
 func TestParticipants(t *testing.T) {
@@ -90,7 +91,6 @@ func TestSendMessage(t *testing.T) {
 	m.EXPECT().ChannelMessageSendComplex("testChannelID", MessageMatcher("<@TestID>: test message", nil)).Times(1)
 	m.EXPECT().ChannelMessageSendComplex("testChannelID", MessageMatcher("<@TestID>: test message with attachment", p)).Times(1)
 
-
 	p.EXPECT().Name().Times(1)
 	p.EXPECT().Body().Times(1)
 
@@ -104,7 +104,7 @@ func TestSendMessage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = lb.SendMessage([]Participant{{UserName: "TestUser", UserID: "TestID"}}, "test message with attachment", p)
+	err = lb.SendMessage([]Participant{{UserName: "TestUser", UserID: "TestID"}}, "test message with attachment", []Picture{p})
 	if err != nil {
 		t.Fatal(err)
 	}
