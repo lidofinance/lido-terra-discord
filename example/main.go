@@ -4,8 +4,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/lidofinance/lido-terra-discord/discord"
 	"log"
+
+	"github.com/lidofinance/lido-terra-discord/discord"
 )
 
 func main() {
@@ -50,7 +51,7 @@ func main() {
 		message = URL + " " + message
 	}
 
-	err = bot.SendMessage(participants, message, pic)
+	err = bot.SendMessage(participants, message, []discord.Picture{pic})
 	if err != nil {
 		log.Fatalln("failed to send message:", err)
 	}

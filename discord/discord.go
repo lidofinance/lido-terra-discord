@@ -2,8 +2,9 @@ package discord
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type Participant struct {
@@ -17,7 +18,7 @@ func (p Participant) Mention() string {
 
 type Bot interface {
 	GetParticipants() ([]Participant, error)
-	SendMessage(participantsToTag []Participant, msg string, picture Picture) error
+	SendMessage(participantsToTag []Participant, msg string, pictures []Picture) error
 }
 
 func NewDefaultLidoBot(token string, guildID, channelID string) (Bot, error) {
@@ -82,7 +83,7 @@ func (lb LidoBot) GetParticipants() ([]Participant, error) {
 	return participants, nil
 }
 
-func (lb LidoBot) SendMessage(participantsToTag []Participant, msgContent string, picture Picture) error {
+func (lb LidoBot) SendMessage(participantsToTag []Participant, msgContent string, pictures []Picture) error {
 	var messageContent string
 	if len(participantsToTag) > 0 {
 		mentions := make([]string, 0, len(participantsToTag))
@@ -95,13 +96,12 @@ func (lb LidoBot) SendMessage(participantsToTag []Participant, msgContent string
 	message := &discordgo.MessageSend{
 		Content: messageContent,
 	}
-	if picture != nil {
-		message.Files = []*discordgo.File{
-			{
-				Name:   picture.Name(),
-				Reader: picture.Body(),
-			},
-		}
+
+	for _, p := range pictures {
+		message.Files = append(message.Files, &discordgo.File{
+			Name:   p.Name(),
+			Reader: p.Body(),
+		})
 	}
 
 	_, err := lb.session.ChannelMessageSendComplex(lb.channelID, message)
